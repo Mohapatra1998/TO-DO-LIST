@@ -1,0 +1,456 @@
+{% extends 'base.html' %} {% load static %} {% block body %}
+{% block css %}
+<style>
+  
+</style>
+{% endblock css%}
+
+    <div class="content-wrapper">
+      <div class="page-header">
+        <h3 class="page-title"> Typography </h3>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">UI Elements</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Typography</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+          <div class="card work-card" id="work-card">
+            <div class="card-body">
+              <h2 class="card-title" style="color:#9a55ff;font-size:50px">Work</h4>
+              <p class="card-description" style="font-size:large"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
+              
+              <div class="table-responsive">
+                <table class="table">
+                  <tbody id="tbody">
+                    {% if all_work%}
+                    {% for w in all_work %}
+                    <tr>
+                      
+                      <td id="wName">
+                       
+                        {% url 'home' as home %}
+                        <a href="#" data-wid="{{w.id}}" class="btn-views">{{w.name}}</a>
+                        
+                      </td>
+                        
+                      <td>
+                        <span class="{% if w.work_status == 'Completed' %}badge badge-gradient-warning {% elif w.work_status == 'Active Task'%}badge badge-gradient-success {% elif w.work_status == 'Upcoming'%}badge badge-gradient-info {%endif%}"
+                          >{{w.work_status}}</label
+                        >
+                      </td>
+                      <td>
+                        <a href="#" class="btn-del" data-wid="{{w.id}}"><i class="mdi mdi-delete menu-icon" style="font-size:30px; color:#9a55ff"></i></a>
+    
+                      </td>
+                      
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 grid-margin stretch-card">
+          <div class="card">
+            {% if work_detail %}
+           
+            <div class="card-body" id="wbody">
+              <h4 class="card-title">{{work_detail.name}} <span></span><span></span><a class="updateWork" data-toggle="modal" data-target="#UpdateWorkTask"><i class="mdi mdi-grease-pencil menu-icon" style="font-size: 30px; color:#9a55ff"></i></a></h4>
+              <h5><i>{{work_detail.date}} </i></h3>
+              <span class="{% if work_detail.work_status == 'Completed' %}badge badge-gradient-warning {% elif work_detail.work_status == 'Active Task'%}badge badge-gradient-success {% elif work_detail.work_status == 'Upcoming'%}badge badge-gradient-info {%endif%}"
+              >{{work_detail.work_status}}</span>
+              
+              <p>{{work_detail.discription}}</p>
+            </div>
+           
+            {% endif %}
+          </div>
+        </div>
+        
+       
+       
+      </div>
+    
+    </div>
+    
+      <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+             
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="card-body">
+                      <h4 class="card-title">Add Task Form</h4>
+                      
+                      <form class="forms-sample work_task form" id="form">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                          <label for="work-name" class="col-sm-3 col-form-label">Task Name</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control work-name" id="work-name" name="task_name" placeholder="taks name" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="work-date" class="col-sm-3 col-form-label">Date</label>
+                            <div class="col-sm-9">
+                              <input
+                                type="date"
+                                class="form-control work-date"
+                                name="date"
+                                id="work-date"
+                                {% if product.date %}value="{{task.date | date:'c'}}"{%endif%}
+                                placeholder="mm/dd/yyyy"
+                                required
+                              />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="work-status" class="col-sm-3 col-form-label">Status</label>
+                            <div class="col-sm-9">
+                              <select class="form-control work-status" name="task_status" required>
+                                <option selected disabled>Select Sastus</option>
+                                <option value="Active Task">Active Task</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Upcoming">Upcoming</option>
+                               
+                                <!-- <option value="Basic" {% if product.product_level == "Basic" %}selected{%endif%}>Basic</option>
+                                <option value="Intermediate" {% if product.product_level == "Intermediate" %}selected{%endif%}>Intermediate</option>
+                                <option value="Advanced" {% if product.product_level == "Advanced" %}selected{%endif%}>Advanced</option>
+                                <option value="Basic & Intermediate" {% if product.product_level == "Basic & Intermediate" %}selected{%endif%}>Basic & Intermediate</option>
+                                <option value="Basic & Advanced" {% if product.product_level == "Basic & Advanced" %}selected{%endif%}>Basic & Advanced</option> -->
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="descreption" class="col-sm-3 col-form-label">Descreption</label>
+                            <div class="col-sm-9">
+                            <textarea class="form-control work-des" rows="10" id="descreption" name="descreption">{% if product.area_covered %}{{product.area_covered}}{%endif%}</textarea>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary AddWork">Submit</button>
+                      </form>
+                    </div>
+                  </div>
+            </div>
+            <!-- <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary AddWork">Submit</button>
+            </div> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- update work  -->
+      <div class="modal fade" id="UpdateWorkTask" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="UpdateWorkTaskLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+             
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="card-body">
+                      <h4 class="card-title">Update Task</h4>
+                      
+                      <form class="forms-sample work_task_update form" id="form_1">
+                        {% csrf_token %}
+                        {% if work_detail %}
+
+                        <input type="hidden" class="form-control work-id" id="work_id" {% if work_detail.name %}value="{{work_detail.id}}"{%endif%}>
+                        <div class="form-group row">
+                          <span style="display: none; color:red" id="fromError">Enter All Field</span>
+                          <label for="work-name" class="col-sm-3 col-form-label">Task Name</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control work-name-u" id="work-name-u" name="task_name" {% if work_detail.name %}value="{{work_detail.name}}"{%endif%} required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="work-date" class="col-sm-3 col-form-label">Date</label>
+                            <div class="col-sm-9">
+                              <input
+                                type="date"
+                                class="form-control work-date-u"
+                                name="date"
+                                id="work-date-u"
+                                {% if work_detail.date %}value="{{work_detail.date | date:'c'}}"{%endif%}
+                                placeholder="mm/dd/yyyy"
+                                required
+                              />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="work-status" class="col-sm-3 col-form-label">Status</label>
+                            <div class="col-sm-9">
+                              <select class="form-control work-status-u" name="task_status" required>
+                                <option selected disabled>Select Sastus</option>
+                                <option value="Active Task" {% if work_detail.work_status == "Active Task" %}selected{%endif%}>Active Task</option>
+                                <option value="Completed" {% if work_detail.work_status == "Completed" %}selected{%endif%}>Completed</option>
+                                <option value="Upcoming" {% if work_detail.work_status == "Upcoming" %}selected{%endif%}>Upcoming</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="descreption" class="col-sm-3 col-form-label">Descreption</label>
+                            <div class="col-sm-9">
+                            <textarea class="form-control work-des-u" rows="10" id="descreption" name="descreption">{% if work_detail.discription %}{{work_detail.discription}}{%endif%}</textarea>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary UpdateWork">Submit</button>
+                      </form>
+                    </div>
+                  </div>
+            </div>
+          
+          </div>
+        </div>
+      </div>
+{% endblock body %}
+
+{% block custom_js %}
+<script>
+   $(document).ready(function(){
+   
+       
+    $('.AddWork').click(function(e){
+            e.preventDefault()
+            output=""
+            var work_name=$(this).closest('.work_task').find('.work-name').val();
+            var work_date=$(this).closest('.work_task').find('.work-date').val();
+            var work_status=$(this).closest('.work_task').find('.work-status').val();
+            var work_des=$(this).closest('.work_task').find('.work-des').val();
+            console.log(work_name, work_date,work_status, work_des)
+            var token = $('input[name=csrfmiddlewaretoken]').val();
+            if (work_name == "") {
+              console.log('enter')
+              alert('Enter work title')
+              $('#fromError').css('visibility','visible')
+            }
+            else if (work_date == ""){
+              console.log('enter')
+              alert('Enter work date')
+            }
+            else if (work_status == ""){
+              consol.log("enter 3")
+              alert('Enter work status')
+            }
+            else{
+              $.ajax({
+                method: "POST",
+                url:"/add-work",
+                data:{
+                    'work_name':work_name,
+                    'work_date':work_date,
+                    'work_status':work_status,
+                    'work_des':work_des,
+                    csrfmiddlewaretoken: token,
+                },
+                success:function(data){
+                    x =data.all_work
+                    if (data.status == 'Save'){
+                      console.log('ssss')
+                      for( i = 0; i < x.length; i++) {
+                        if (x[i].work_status=="Completed"){
+                          output += "<tr><td>{% url 'home' as home %}<a href='{{home}}?id={{w.id}}' class='workDetail'>" + x[i].name + "</td></a><td><label class='badge badge-gradient-warning'>"  + x[i].work_status + "</label></td></tr>";
+
+                        }
+                        else if (x[i].work_status=="Active Task"){
+                          output += "<tr><td>{% url 'home' as home %}<a href='{{home}}?id={{w.id}}'>" + x[i].name + "</td></a><td><label class='badge badge-gradient-success'>"  + x[i].work_status + "</label></td></tr>";
+
+                        }
+                        else if (x[i].work_status=="Upcoming"){
+                          output += "<tr><td>{% url 'home' as home %}<a href='{{home}}?id={{w.id}}'>" + x[i].name + "</td></a><td><label class='badge badge-gradient-info'>"  + x[i].work_status + "</label></td></tr>";
+
+                        }
+                        }
+
+                        $("#tbody").html(output);
+                        $("form")[0].reset();
+                        $('#staticBackdrop').modal('hide');
+                    }
+                    if (data.status == 0){
+                      console.log('reed');
+
+                    }
+                
+
+                },
+            });
+          };
+        });
+  
+  // update 
+  $('.UpdateWork').click(function(e){
+            e.preventDefault()
+            output=""
+            detail=""
+            var work_id=$(this).closest('.work_task_update').find('.work-id').val();
+            var work_name=$(this).closest('.work_task_update').find('.work-name-u').val();
+            var work_date=$(this).closest('.work_task_update').find('.work-date-u').val();
+            var work_status=$(this).closest('.work_task_update').find('.work-status-u').val();
+            var work_des=$(this).closest('.work_task_update').find('.work-des-u').val();
+            console.log(work_name, work_date,work_status, work_des)
+            var token = $('input[name=csrfmiddlewaretoken]').val();
+            if (work_name == "") {
+              console.log('enter')
+              alert('Enter work title')
+            }
+            else if (work_date == ""){
+              console.log('enter')
+              alert('Enter work date')
+
+            }
+            else if (work_status == ""){
+              consol.log("enter 3")
+              alert('Enter work status')
+            }
+            else{
+              $.ajax({
+                method: "POST",
+                url:"/update-work",
+                data:{
+                    'work_id':work_id,
+                    'work_name':work_name,
+                    'work_date':work_date,
+                    'work_status':work_status,
+                    'work_des':work_des,
+                    csrfmiddlewaretoken: token,
+                },
+                success:function(data){
+                    x =data.all_work
+                    if (data.status == 1){
+                      for( i = 0; i < x.length; i++) {
+                        if (x[i].work_status=="Completed"){
+                          output += "<tr><td>{% url 'home' as home %}<a href='{{home}}?id={{w.id}}' class='workDetail'>" + x[i].name + "</td></a><td><label class='badge badge-gradient-warning'>"  + x[i].work_status + "</label></td></tr>";
+
+                        }
+                        else if (x[i].work_status=="Active Task"){
+                          output += "<tr><td>{% url 'home' as home %}<a href='{{home}}?id={{w.id}}'>" + x[i].name + "</td></a><td><label class='badge badge-gradient-success'>"  + x[i].work_status + "</label></td></tr>";
+
+                        }
+                        else if (x[i].work_status=="Upcoming"){
+                          output += "<tr><td>{% url 'home' as home %}<a href='{{home}}?id={{w.id}}'>" + x[i].name + "</td></a><td><label class='badge badge-gradient-info'>"  + x[i].work_status + "</label></td></tr>";
+
+                        }
+                        }
+                        if (data.task_status=="Completed"){
+                          detail += "<h4 class='card-title'>" + data.name + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class='updateWork' data-toggle='modal' data-target='#UpdateWorkTask'><i class='mdi mdi-grease-pencil menu-icon' style='font-size: 30px; color:#9a55ff'></i></a></h4><h5><i>" + data.date 
+                          + "</h5></i><span class='badge badge-gradient-warning'>" + data.task_status + "</h5></span><p>" + data.des + "</p>"
+                        }
+                        else if (data.task_status=="Active Task"){
+                          detail += "<h4 class='card-title'>" + data.name + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class='updateWork' data-toggle='modal' data-target='#UpdateWorkTask'><i class='mdi mdi-grease-pencil menu-icon' style='font-size: 30px; color:#9a55ff'></i></a></h4><h5><i>" + data.date 
+                          + "</h5></i><span class='badge badge-gradient-success'>" + data.task_status + "</h5></span><p>" + data.des + "</p>"
+                        }
+                        else if (data.task_status=="Upcoming"){
+                          detail += "<h4 class='card-title'>" + data.name + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class='updateWork' data-toggle='modal' data-target='#UpdateWorkTask'><i class='mdi mdi-grease-pencil menu-icon' style='font-size: 30px; color:#9a55ff'></i></a></h4><h5><i>" + data.date 
+                          + "</h5></i><span class='badge badge-gradient-info'>" + data.task_status + "</h5></span><p>" + data.des + "</p>"
+
+                        }
+                        $("#tbody").html(output);
+                        // $("form")[0].reset();
+                        $("#wbody").html(detail)
+                        $('#UpdateWorkTask').modal('hide');
+                    }
+                    if (data.status == 0){
+                      console.log('reed');
+
+                    }
+                
+
+                },
+            });
+          };
+        });
+        $("tbody").on("click", ".btn-del", function(){
+          let id = $(this).attr("data-wid");
+          let csrf=$('input[name=csrfmiddlewaretoken]').val();
+          mythis = this;
+          $.ajax({
+            url: "/delete",
+            method: "POST",
+            data:{
+              'wid':id,
+              csrfmiddlewaretoken: csrf,
+            },
+            success: function(data){
+              if(data.status==1){
+              alert('Data Deleted Successfully')
+              $(mythis).closest('tr').fadeOut();
+              $("#wbody").load(location.href + " #wbody");
+              }
+              if(data.status==0){
+                alert('Enable to Delete Data')
+
+              }
+            }
+
+          });
+        });
+
+
+
+        $("tbody").on("click", ".btn-views", function(){
+          detail=""
+          let id = $(this).attr("data-wid");
+          let csrf=$('input[name=csrfmiddlewaretoken]').val();
+          mythis = this;
+          $.ajax({
+            url: "/work-details",
+            method: "GET",
+            data:{
+              'wid':id,
+              csrfmiddlewaretoken: csrf,
+            },
+            success: function(data){
+              if(data.status==1){
+                $(mythis).closest('#wbody').fadeOut();
+                if (data.task_status=="Completed"){
+                  detail += "<h4 class='card-title'>" + data.name + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class='updateWork' data-toggle='modal' data-target='#UpdateWorkTask'><i class='mdi mdi-grease-pencil menu-icon' style='font-size: 30px; color:#9a55ff'></i></a></h4><h5><i>" + data.date 
+                          + "</h5></i><span class='badge badge-gradient-warning'>" + data.task_status + "</h5></span><p>" + data.des + "</p>"
+                        }
+                else if (data.task_status=="Active Task"){
+                  detail += "<h4 class='card-title'>" + data.name + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class='updateWork' data-toggle='modal' data-target='#UpdateWorkTask'><i class='mdi mdi-grease-pencil menu-icon' style='font-size: 30px; color:#9a55ff'></i></a></h4><h5><i>" + data.date 
+                          + "</h5></i><span class='badge badge-gradient-success'>" + data.task_status + "</h5></span><p>" + data.des + "</p>"
+                        }
+                else if (data.task_status=="Upcoming"){
+                  detail += "<h4 class='card-title'>" + data.name + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class='updateWork' data-toggle='modal' data-target='#UpdateWorkTask'><i class='mdi mdi-grease-pencil menu-icon' style='font-size: 30px; color:#9a55ff'></i></a></h4><h5><i>" + data.date 
+                          + "</h5></i><span class='badge badge-gradient-info'>" + data.task_status + "</h5></span><p>" + data.des + "</p>"
+                  }
+                $("#wbody").html(detail)
+                // $("#price-details").load(location.href + " #price-details");
+              
+              }
+              if(data.status==0){
+               console.log('redd')
+
+              }
+            }
+
+          })
+        })
+  
+  
+        
+    });
+
+    
+</script>
+{% endblock custom_js %}

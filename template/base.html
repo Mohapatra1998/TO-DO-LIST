@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>{% block title %}{% endblock %}</title>
+    
+
+
+    <!-- plugins:css -->
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}"
+    />
+    
+
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}"
+    />
+    
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    
+    {% block css %}{% endblock css%}
+  </head>
+  <body>
+    <div class="container-scroller">
+      {% include 'navbar.html'%}
+      <div class="container-fluid page-body-wrapper">
+        {% include 'sidenavbar.html'%}
+        <div class="main-panel">
+          {% block body %} {% endblock body %}
+          <footer class="footer">
+            <div class="container-fluid clearfix">
+              <span
+                class="text-muted d-block text-center text-sm-left d-sm-inline-block"
+                >Copyright © todolist 2022</span
+              >
+              <span
+                class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+              >
+                <a href="" target="_blank">webkron.com</a> | From To-do-list
+              
+              </span>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+     <!-- plugins:js -->
+     <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+     <!-- endinject -->
+     <!-- Plugin js for this page -->
+     <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+     <!-- End plugin js for this page -->
+     <!-- inject:js -->
+     <script src="{% static 'assets/js/off-canvas.js' %}"></script>
+     <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+     <script src="{% static 'assets/js/misc.js' %}"></script>
+     <!-- endinject -->
+     <!-- Custom js for this page -->
+     <script src="{% static 'assets/js/dashboard.js' %}"></script>
+     <script src="{% static 'assets/js/todolist.js' %}"></script>
+    <script>
+      $(function () {
+        $('.panel-heading').each(function (i) {
+          len = $(this).text().length;
+          if (len > 150) {
+            $(this).text($(this).text().substr(0, 150) + '...');
+          }
+        });
+      });
+    </script>
+    {% block custom_js %} {% endblock custom_js %}
+  </body>
+</html>
